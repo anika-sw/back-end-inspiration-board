@@ -37,20 +37,6 @@ def get_board_by_id(board_id):
 
     return make_response({"boards": board.to_dict()})
 
-def post_to_slack(message):
-    url = "https://slack.com/api/chat.postMessage"
-
-    data = {
-        "channel": "C04FZS8P2BH",
-        "text": message
-    }
-    header_key = os.environ.get("authorization")
-
-    response = requests.post(url=url, json=data,
-    headers={"Authorization": header_key})
-
-    return response
-
 @board_bp.route("", methods=["POST"])
 def create_board():
     request_body = request.get_json()
@@ -63,8 +49,6 @@ def create_board():
     db.session.add(new_board)
     db.session.commit()
     
-    # post_to_slack(f"New board {new_board.title} has been created")
-
     return make_response({"boards": new_board.to_dict()}, 201)
 
 
